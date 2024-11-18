@@ -1,5 +1,6 @@
-= Some Slide
+= Datenbankversionierung
 :author: firstname lastname
+:hide-uri-scheme:
 :email: x.y@htl.at
 :revnumber: 1.0
 :revdate: {docdate}
@@ -35,7 +36,45 @@ endif::[]
 
 Testing filter by changing documentation file
 
-== Slide w/ image
+== Einführung
+* Worum gehts eigentlich?
+
+== Was ist das Problem?
+* Welches Problem besteht?
+* Inkl praktischem Beispiel
+
+== Wie wird das Problem gelöst?
+* Wie kann diese Technologie das Problem lösen?
+* Ebenfalls beispiel
+
+== Liquibase
+
+== Alternativen
+* Konzepte / Preis...
+
+== Kriterienkatalog / Unterschiede
+* Warum genau Liquibase (Open-Source)
+
+== Workflow mit Grafik
+* Wie wird es verwendet?
+* Was muss man machen?
+* Wie funktioniert es?
+
+== Live DEMO
+
+== Aufsetzen
+https://quarkus.io/guides/liquibase
+
+== Verwendung
+
+== Best-Practices
+* Datenbankänderungen immer versionieren
+* Datenbankänderungen immer über Migrationsskripte
+* Atomicity (Jeder Migrationsschritt atomar, also ganz oder garnicht)
+
+== Fazit
+* Machts Sinn?
+* Vorteile / Nachteile?
 
 [.stretch]
 image::img.png[]
