@@ -67,6 +67,12 @@ https://quarkus.io/guides/liquibase
 
 == Verwendung
 
+== Mit ORM-Mapper
+
+== CRUD
+
+== Rollback
+
 == Best-Practices
 * Datenbankänderungen immer versionieren
 * Datenbankänderungen immer über Migrationsskripte
