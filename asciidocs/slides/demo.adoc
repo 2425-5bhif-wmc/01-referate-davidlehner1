@@ -29,7 +29,7 @@ ifndef::env-ide[]
 :imagesdir: images
 endif::[]
 //:revealjs_theme: sky
-//:title-slide-background-image: img.png
+//:title-slide-background-image: Developer-Workflow.png
 :title-slide-transition: zoom
 :title-slide-transition-speed: fast
 
@@ -37,12 +37,34 @@ Konzept, Technologien, Liquibase
 
 == Einführung
 * Verwaltung und Nachverfolgung von Änderungen
-* Innerhalb eines Datenbankschemas
+* Migrationen (automatische Anwendung auf verschiedenen Systemen)
+
+
+[.notes]
+****
+* Bei der Datenbankversionierung geht es darum, Informationen über ältere Stände während der Entwicklung zu speichern.
+* Die Verwaltung und Nachverfolgung von Änderungen ist wichtig.
+* Verschiedene Konfigurationen für Verschiedene Umgebungen (Entwicklung, Production...)
+* Mittels Profiles in Quarkus
+* Dies wird erledigt mittels Migrationsskripte
+****
 
 == Was ist das Problem?
-* Verlorene Informationen der Entwicklung
+* Verlorene Informationen in der Entwicklung
 * Schwierige Rückverfolgbarkeit und Wiederherstellung von früheren Ständen.
-* Inkonsistenz zwischen verschiedenen Umgebungen.
+* Inkonsistenz zwischen verschiedenen Umgebungen (fehlerhafte Tabellen)
+* Rollback Probleme
+
+[.notes]
+****
+* Hauptsächliches Problem liegt in der Entwicklung
+* Wird keine Datenbankversionierung verwendet, gehen Informationen über alte Stände verloren.
+* Wird nun an einer neuen Funktionalität gearbeitet, wodurch die Datenbank verändert werden muss, kann es bei Problemen schwierig werden den Fehler zu finden bzw zu rekonstruieren.
+* Man is sich schließlich nicht ganz sicher woher der Fehler kommt
+* Die Entwickler können zudem auf ihren lokalen Maschinen andere Stände der Datenbank haben, wie auf Testumgebungen / Production Umgebungen.
+* Mit einem Migrationsskript würde das überall gleich aussehen, bzw übernommen werden können.
+* Falls ein Release in der Produktionsumgebung schiefgeht, gibt es keine einfache Möglichkeit, die Datenbank auf einen funktionierenden Zustand zurückzusetzen, ohne aufwändige manuelle Eingriffe vorzunehmen.
+****
 
 === Beispiel (Ausgangssituation):
 * Gemeinsame Datenbank
@@ -61,13 +83,27 @@ Konzept, Technologien, Liquibase
 
 == Wie wird das Problem gelöst?
 * Einsatz von Tools zur Datenbankversionierung wie Liquibase.
-* Dokumentation der Veränderung durch Versionierung
-* Automatisierung der Anwendung von Migrationsskripten (z. B. durch Pipelines).
+* Zentralisierte Verwaltung von Datenbankänderungen (Versionierung)
+* Automatische Synchronisierung der Datenbank
+** https://docs.liquibase.com/commands/inspection/diff.html[Unterschiede Herausfinden]
+* Rollback-Mechanismus
+* Konsistenz
 
-=== Beispiel (Lösung):
-* Änderungen versionieren (In Changelogs)
-* Automatisierung (Änderungen automatisch anwendbar von CI-Tool)
-* Isolierte Tests (seperater Datenbankzustand)
+[.notes]
+****
+* Zentralisierte...
+** Alle Änderungen in einem ChangeLog
+** Jedes Mitglied verfasst seine Änderungen in dieser Datei, bevor es auf der Datenbank angewendet wird
+* Automatische Synchro
+** Es kann automatisch überprüft werden welche Änderungen noch nicht in der Datenbank übernommen wurden
+** Änderungen werden entsprechend ausgerollt "Liquibase update"
+* Rollback - Mechanismus
+** Verursacht Feature oder Release Probleme, können diese einfach mittels Migrationsskripten zurückverfolgt und gerollbacked werden
+* Konsistenz
+** Durch die Automatisierung der Datenbankänderungen können Entwickler problemlos in einer konsistenten Testumgebung arbeiten.
+** Wenn ein Entwickler eine neue Umgebung einrichtet oder an einem Feature arbeitet, kann er die Datenbankversionierung verwenden, um sicherzustellen, dass alle notwendigen Änderungen konsistent angewendet werden.
+** Neues ChangeLog erstellen, liquibase:update verwenden, fertig
+****
 
 == Liquibase
 https://medium.com/@tgt1022/how-to-execute-database-migrations-with-liquibase-9318b8e5da19
@@ -75,23 +111,55 @@ https://appmaster.io/de/glossary/versionierung
 https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDiplomArbeiten/finished/2004/rieche_expose_040520.pdf
 
 * Open-Source-Lösung für Datenbankversionierung und -migration.
-* Unterstützt diverse Datenbankmanagementsysteme (DBMS).
-* Vorteile:
-** Automatisierte Skriptausführung.
-** Änderungsverfolgung mit „Changelogs“.
+* Unterstützt diverse Datenbanken (auch NoSQL)
 
-== Alternativen
-* Konzepte / Preis...
+== https://www.baeldung.com/liquibase-vs-flyway[Alternativen]
+* Flyway
 
-== Warum Liquibase?
-* Open-Source, dadurch kostenfrei verfügbar.
-* Hohe Flexibilität und große Community.
-* Gute Integration in Entwicklungs- und Deployment-Workflows.
+=== https://www.baeldung.com/liquibase-vs-flyway[Gleichheiten]
+* Open-Source
+* Grundprinzip gleich
+* Basierend auf Java
+* CLIs vorhanden
+* Hohe Unterstützung verschiedener Datenbanken
+
+=== https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
+* Einfachere Darstellung von Veränderungen (SQL vs. SQL, XML, YAML, JSON)
+* Striktere Namensgebung bei Flyway
+** V = Versionised
+** U = Undo
+** R = Repeatable
+** BSP: V01__Add_New_Column.sql
+
+=== https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
+* Keine Filename Conventions bei Liquibase
+* Ein "Haupt-file" beinhaltet alle veränderungen und Referenzen auf andere Files
+* Reihung klarer bei Liquibase
+** Nach definition in Root-File
+** Flyway: In Filename angeben
+
+=== https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
+* Rollback
+** Liquibase: Via CLI: liquibase rollback ...
+** Flyway: Nach Filenames (U = Undo)
+* Kein Snapshot feature bei Flyway (aktueller Stand der DB)
 
 == Workflow mit Grafik
-* Wie wird es verwendet?
-* Was muss man machen?
-* Wie funktioniert es?
+image::Developer-Workflow.png[Developer Workflow]
+1. ChangeSet erstellen, welches die Änderungen beinhaltet
+2. liquibase update - Datenbank ändern
+3. Änderungen am Code vornehmen, falls nötig
+4. Applikation mit Datenbank testen
+5. Commit von Applikation und Changeset
+
+[.notes]
+****
+* Wenn Änderungen an der Datenbank durchgeführt werden müssen, muss lokal ein ChangeSet erstellt werden
+* Liquibase update durchführen, um die Änderungen auf die Datenbank zu bringen
+* Sind Änderungen in der Applikation nötig, sollten dies nun durchgeführt werden
+* Test der Applikation mit Datenbankveränderungen
+* Commit von ChangeSet und Applikation
+****
 
 == Live DEMO
 
@@ -101,20 +169,34 @@ https://quarkus.io/guides/liquibase
 == Verwendung
 
 === Create, Delete, Update
+* Änderungen immer in ChangeLogs
 
 === Rollback
+* liquibase rollback-count --count=2
+* -''- rollback --tag=test
+* auch programmatisch möglich
+.
+.
+.
 
 === ORM-Mapper
+image::ORM.png[]
 
+== https://docs.liquibase.com/concepts/bestpractices.html[Best-Practices]
+* Changelog Struktur
+** Root-ChangeLog
+** Files nach Versionen, oder Tabellen
+* Maximal eine Änderung pro ChangeSet
 
-== Best-Practices
-* Datenbankänderungen immer versionieren
-* Datenbankänderungen immer über Migrationsskripte
-* Atomicity (Jeder Migrationsschritt atomar, also ganz oder garnicht)
+== Vorteile
+* Änderungen gespeichert
+* Rollback feature, bei Fehlern oder arbeiten auf gemeinsamer DB
+* Fehleranfälligkeit vermindert
 
-== Fazit
-* Machts Sinn?
-* Vorteile / Nachteile?
+== Nachteile
+* Höherer Aufwand bei Erstellung des Projekts
+* Funktionalität mit ORM-Mapper etwas umständlich
+
 
 [.stretch]
 image::img.png[]
