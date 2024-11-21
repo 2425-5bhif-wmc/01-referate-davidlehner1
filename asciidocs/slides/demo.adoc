@@ -1,7 +1,6 @@
 = Datenbankversionierung
-:author: firstname lastname
+:author: David Lehner
 :hide-uri-scheme:
-:email: x.y@htl.at
 :revnumber: 1.0
 :revdate: {docdate}
 :revremark: SLIDEDEMO @ HTL Leonding
@@ -34,26 +33,60 @@ endif::[]
 :title-slide-transition: zoom
 :title-slide-transition-speed: fast
 
-Testing filter by changing documentation file
+Konzept, Technologien, Liquibase
 
 == Einführung
-* Worum gehts eigentlich?
+* Verwaltung und Nachverfolgung von Änderungen
+* Innerhalb eines Datenbankschemas
 
 == Was ist das Problem?
-* Welches Problem besteht?
-* Inkl praktischem Beispiel
+* Verlorene Informationen der Entwicklung
+* Schwierige Rückverfolgbarkeit und Wiederherstellung von früheren Ständen.
+* Inkonsistenz zwischen verschiedenen Umgebungen.
+
+=== Beispiel (Ausgangssituation):
+* Gemeinsame Datenbank
+* CI-Tool in Verwendung
+* Neue Funktionalität fordert Datenbankänderung
+
+=== Beispiel (Problem):
+* Beeinflusst Tests auf anderen Branches
+* Änderungen müssen zurückgesetzt werden
+* Wiederholung
+
+=== Beispiel (Warum?):
+* Hoher Aufwand
+* Fehleranfälligkeit
+* Blockieren anderer Teams, während Datenbankänderungen aktiv sind.
 
 == Wie wird das Problem gelöst?
-* Wie kann diese Technologie das Problem lösen?
-* Ebenfalls beispiel
+* Einsatz von Tools zur Datenbankversionierung wie Liquibase.
+* Dokumentation der Veränderung durch Versionierung
+* Automatisierung der Anwendung von Migrationsskripten (z. B. durch Pipelines).
+
+=== Beispiel (Lösung):
+* Änderungen versionieren (In Changelogs)
+* Automatisierung (Änderungen automatisch anwendbar von CI-Tool)
+* Isolierte Tests (seperater Datenbankzustand)
 
 == Liquibase
+https://medium.com/@tgt1022/how-to-execute-database-migrations-with-liquibase-9318b8e5da19
+https://appmaster.io/de/glossary/versionierung
+https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDiplomArbeiten/finished/2004/rieche_expose_040520.pdf
+
+* Open-Source-Lösung für Datenbankversionierung und -migration.
+* Unterstützt diverse Datenbankmanagementsysteme (DBMS).
+* Vorteile:
+** Automatisierte Skriptausführung.
+** Änderungsverfolgung mit „Changelogs“.
 
 == Alternativen
 * Konzepte / Preis...
 
-== Kriterienkatalog / Unterschiede
-* Warum genau Liquibase (Open-Source)
+== Warum Liquibase?
+* Open-Source, dadurch kostenfrei verfügbar.
+* Hohe Flexibilität und große Community.
+* Gute Integration in Entwicklungs- und Deployment-Workflows.
 
 == Workflow mit Grafik
 * Wie wird es verwendet?
@@ -67,11 +100,12 @@ https://quarkus.io/guides/liquibase
 
 == Verwendung
 
-== Mit ORM-Mapper
+=== Create, Delete, Update
 
-== CRUD
+=== Rollback
 
-== Rollback
+=== ORM-Mapper
+
 
 == Best-Practices
 * Datenbankänderungen immer versionieren
