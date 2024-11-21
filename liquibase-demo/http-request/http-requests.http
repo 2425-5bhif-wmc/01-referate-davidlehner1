@@ -1,0 +1,23 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+
+GET http://localhost:8080/liquibase/rollbackToCount/2
+Content-Type: */*
+
+###
+
+GET http://localhost:8080/liquibase/tag?tag=test
+Content-Type: */*
+
+###
+
+GET http://localhost:8080/liquibase/rollback?tag=createQuarkusTable
+Content-Type: */*
+
+###
+
+GET http://localhost:8080/liquibase/update
+Content-Type: */*

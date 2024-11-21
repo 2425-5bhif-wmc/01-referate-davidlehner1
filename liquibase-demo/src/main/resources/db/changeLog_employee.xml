@@ -1,0 +1,60 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="david" id="1" labels="testing">
+        <createTable tableName="quarkus">
+            <column name="ID" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="tag-quarkus" author="david" labels="testingAll">
+        <tagDatabase tag="createQuarkusTable"/>
+    </changeSet>
+
+    <changeSet id="3" author="david" labels="testingAll">
+        <addColumn tableName="quarkus">
+            <column name="EMAIL" type="VARCHAR(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="tag-email" author="david" labels="testingAll">
+        <tagDatabase tag="renamedEmail"/>
+    </changeSet>
+
+    <changeSet author="david" id="4" labels="testingAll">
+        <dropColumn tableName="quarkus" columnName="NAME"/>
+        <rollback>
+            <addColumn tableName="quarkus">
+                <column name="NAME" type="VARCHAR(255)"/>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="tag-name" author="david" labels="testingAll">
+        <tagDatabase tag="addNameColumn"/>
+    </changeSet>
+
+    <changeSet author="david" id="5" labels="testingAll">
+        <renameColumn tableName="quarkus" oldColumnName="EMAIL" newColumnName="E-MAIL" columnDataType="VARCHAR(255)"/>
+    </changeSet>
+
+    <changeSet id="tag-beforeRename" author="david" labels="testingAll">
+        <tagDatabase tag="beforeRenameQuarkus"/>
+    </changeSet>
+
+    <changeSet  author="david"  id="renameTable-example" labels="testingAll">
+        <renameTable newTableName="employee"
+                     oldTableName="quarkus"/>
+    </changeSet>
+
+    <changeSet id="tag-renameQuarkus" author="david" labels="testingAll">
+        <tagDatabase tag="renameQuarkusTable"/>
+    </changeSet>
+
+</databaseChangeLog>
