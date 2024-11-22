@@ -194,6 +194,9 @@ image::Developer-Workflow.png[Developer Workflow]
 
 == Aufsetzen
 * https://quarkus.io/guides/liquibase
+* https://docs.liquibase.com/concepts/connections/creating-config-properties.html
+* Quarkus maven dependency
+* Liquibase properties file
 
 == Verwendung
 
@@ -231,6 +234,8 @@ image::ORM.png[]
 ** https://medium.com/@tgt1022/how-to-execute-database-migrations-with-liquibase-9318b8e5da19
 ** https://appmaster.io/de/glossary/versionierung
 ** https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDiplomArbeiten/finished/2004/rieche_expose_040520.pdf
+** https://docs.liquibase.com/concepts/introduction-to-liquibase.html
+** https://docs.liquibase.com/concepts/connections/creating-config-properties.html
 
 // [.stretch]
 // image::img.png[]
