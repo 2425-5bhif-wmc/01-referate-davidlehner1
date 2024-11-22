@@ -67,19 +67,30 @@ Konzept, Technologien, Liquibase
 ****
 
 === Beispiel (Ausgangssituation):
-* Gemeinsame Datenbank
-* CI-Tool in Verwendung
+* Teamstruktur
 * Neue Funktionalität fordert Datenbankänderung
 
-=== Beispiel (Problem):
-* Beeinflusst Tests auf anderen Branches
-* Änderungen müssen zurückgesetzt werden
-* Wiederholung
+[.notes]
+****
+* Mehrere Teams arbeiten an derselben Datenbank, z. B. das Frontend-Team und das Backend-Team.
+* Das Frontend-Team führt eine neue Funktion ein, die zusätzliche Spalten in der Datenbank benötigt.
+****
 
-=== Beispiel (Warum?):
-* Hoher Aufwand
-* Fehleranfälligkeit
-* Blockieren anderer Teams, während Datenbankänderungen aktiv sind.
+=== Beispiel (Problem):
+* Umsetzung ohne Versionierung
+* Im Backend kommt es zu Fehlern
+* Rollback
+* Synchonisationsproblem
+
+[.notes]
+****
+* Das Fronted-Team implementiert die neuen Spalten in der DB und setzt diese Änderung direkt auf der Production DB um
+* Backend-Team hat noch kein Update für neue Spalten durchgeführt. Code schlägt fehl.
+* Rollback: Datenbankänderungen müssen zurückgesetzt werden
+* Es gibt keinen automatisierten Weg -> das Team versucht die Struktur händisch wieder herzustellen. Könnte weitere Fehler auslösen
+* Andere Teams haben die Änderung ebenfalls nicht mitbekommen, da diese nicht dokumentiert wurde
+* Lokale Datenbanken in den Teams könnten variieren
+****
 
 == Wie wird das Problem gelöst?
 * Einsatz von Tools zur Datenbankversionierung wie Liquibase.
@@ -88,6 +99,7 @@ Konzept, Technologien, Liquibase
 ** https://docs.liquibase.com/commands/inspection/diff.html[Unterschiede Herausfinden]
 * Rollback-Mechanismus
 * Konsistenz
+* Unabhängigkeit
 
 [.notes]
 ****
@@ -103,13 +115,11 @@ Konzept, Technologien, Liquibase
 ** Durch die Automatisierung der Datenbankänderungen können Entwickler problemlos in einer konsistenten Testumgebung arbeiten.
 ** Wenn ein Entwickler eine neue Umgebung einrichtet oder an einem Feature arbeitet, kann er die Datenbankversionierung verwenden, um sicherzustellen, dass alle notwendigen Änderungen konsistent angewendet werden.
 ** Neues ChangeLog erstellen, liquibase:update verwenden, fertig
+* Unabhängigkeit
+** Teams können lokal oder in deren eigenen Staging-Umgebungen mit anderen Datenbankversionen arbeiten. Wurden eh dokumentiert.
 ****
 
 == Liquibase
-https://medium.com/@tgt1022/how-to-execute-database-migrations-with-liquibase-9318b8e5da19
-https://appmaster.io/de/glossary/versionierung
-https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDiplomArbeiten/finished/2004/rieche_expose_040520.pdf
-
 * Open-Source-Lösung für Datenbankversionierung und -migration.
 * Unterstützt diverse Datenbanken (auch NoSQL)
 
@@ -123,6 +133,16 @@ https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDip
 * CLIs vorhanden
 * Hohe Unterstützung verschiedener Datenbanken
 
+[.notes]
+****
+* Beide Systeme sind Open-Source
+* Beide benutzen die gleichen Grundprinzipien
+** Migrationsskripts, welche Datenbankversionen dokumentieren, ähnliche Funktionalität
+* Beide basierend auf Java
+* Flyway als auch Liquibase haben eine CLI
+* Hohe Datenbankunterstützung
+****
+
 === https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
 * Einfachere Darstellung von Veränderungen (SQL vs. SQL, XML, YAML, JSON)
 * Striktere Namensgebung bei Flyway
@@ -131,11 +151,20 @@ https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDip
 ** R = Repeatable
 ** BSP: V01__Add_New_Column.sql
 
+[.notes]
+****
+* Versionen und Veränderungen werden einfacher Dargestellt.
+** Beispielsweise gibt es in Flyway naming conventions, die wirklich so sein MÜSSEN
+* Zudem is Liquibase offener bzgl. Format.
+* Änderungen können in SQL, XML, YAML als auch JSON dokumentiert werden
+* Flyway nur SQL
+****
+
 === https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
 * Keine Filename Conventions bei Liquibase
 * Ein "Haupt-file" beinhaltet alle veränderungen und Referenzen auf andere Files
 * Reihung klarer bei Liquibase
-** Nach definition in Root-File
+** Liquibase: Nach definition in Root-File
 ** Flyway: In Filename angeben
 
 === https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
@@ -144,7 +173,7 @@ https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDip
 ** Flyway: Nach Filenames (U = Undo)
 * Kein Snapshot feature bei Flyway (aktueller Stand der DB)
 
-== Workflow mit Grafik
+== Workflow
 image::Developer-Workflow.png[Developer Workflow]
 1. ChangeSet erstellen, welches die Änderungen beinhaltet
 2. liquibase update - Datenbank ändern
@@ -164,7 +193,7 @@ image::Developer-Workflow.png[Developer Workflow]
 == Live DEMO
 
 == Aufsetzen
-https://quarkus.io/guides/liquibase
+* https://quarkus.io/guides/liquibase
 
 == Verwendung
 
@@ -185,7 +214,7 @@ image::ORM.png[]
 == https://docs.liquibase.com/concepts/bestpractices.html[Best-Practices]
 * Changelog Struktur
 ** Root-ChangeLog
-** Files nach Versionen, oder Tabellen
+** Files nach Versionen, oder Entitäten
 * Maximal eine Änderung pro ChangeSet
 
 == Vorteile
@@ -197,6 +226,11 @@ image::ORM.png[]
 * Höherer Aufwand bei Erstellung des Projekts
 * Funktionalität mit ORM-Mapper etwas umständlich
 
+== Vielen Dank!
+* Quellen:
+** https://medium.com/@tgt1022/how-to-execute-database-migrations-with-liquibase-9318b8e5da19
+** https://appmaster.io/de/glossary/versionierung
+** https://www.informatik.hu-berlin.de/de/forschung/gebiete/wbi/teaching/studienDiplomArbeiten/finished/2004/rieche_expose_040520.pdf
 
 [.stretch]
 image::img.png[]
