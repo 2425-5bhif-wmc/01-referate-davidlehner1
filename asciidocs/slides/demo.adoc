@@ -123,7 +123,74 @@ Konzept, Technologien, Liquibase
 * Open-Source-Lösung für Datenbankversionierung und -migration.
 * Unterstützt diverse Datenbanken (auch NoSQL)
 
-== https://www.baeldung.com/liquibase-vs-flyway[Alternativen]
+== Live DEMO
+
+== Aufsetzen
+* https://quarkus.io/guides/liquibase
+* https://docs.liquibase.com/concepts/connections/creating-config-properties.html
+* Quarkus maven dependency
+* Liquibase properties file
+
+[source, xml]
+----
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-liquibase</artifactId>
+</dependency>
+----
+
+== Verwendung
+
+=== Create, Delete, Update
+* Änderungen immer in ChangeLogs
+
+[source, xml]
+----
+    <changeSet author="david" id="1" labels="testing">
+        <createTable tableName="quarkus">
+            <column name="ID" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+----
+
+=== Rollback
+* liquibase rollback-count --count=2
+* -''- rollback --tag=test
+* auch programmatisch möglich
+
+[source, xml]
+----
+    <changeSet id="tag-quarkus" author="david" labels="testingAll">
+        <tagDatabase tag="createQuarkusTable"/>
+    </changeSet>
+----
+
+=== ORM-Mapper
+image::ORM.png[]
+
+== https://docs.liquibase.com/concepts/bestpractices.html[Best-Practices]
+* Changelog Struktur
+** Root-ChangeLog
+** Files nach Versionen, oder Entitäten
+* Maximal eine Änderung pro ChangeSet
+
+=== Mehrere Datenbanken
+image::multiple_dbs.png[]
+
+=== Mehrere Datenbanken
+
+[source, bash]
+----
+liquibase update --changelog-file=masterChangelog.xml \
+          --url=<Database URL> \
+          --username=<username> \
+          --password=<password>
+----
+
+== https://www.baeldung.com/liquibase-vs-flyway[Alternative]
 * Flyway
 
 === https://www.baeldung.com/liquibase-vs-flyway[Gleichheiten]
@@ -162,7 +229,7 @@ Konzept, Technologien, Liquibase
 
 === https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
 * Keine Filename Conventions bei Liquibase
-* Ein "Haupt-file" beinhaltet alle veränderungen und Referenzen auf andere Files
+* Ein "Haupt-file" beinhaltet alle Veränderungen und Referenzen auf andere Files
 * Reihung klarer bei Liquibase
 ** Liquibase: Nach definition in Root-File
 ** Flyway: In Filename angeben
@@ -175,6 +242,8 @@ Konzept, Technologien, Liquibase
 
 == Workflow
 image::Developer-Workflow.png[Developer Workflow]
+
+=== Workflow
 1. ChangeSet erstellen, welches die Änderungen beinhaltet
 2. liquibase update - Datenbank ändern
 3. Änderungen am Code vornehmen, falls nötig
@@ -189,36 +258,6 @@ image::Developer-Workflow.png[Developer Workflow]
 * Test der Applikation mit Datenbankveränderungen
 * Commit von ChangeSet und Applikation
 ****
-
-== Live DEMO
-
-== Aufsetzen
-* https://quarkus.io/guides/liquibase
-* https://docs.liquibase.com/concepts/connections/creating-config-properties.html
-* Quarkus maven dependency
-* Liquibase properties file
-
-== Verwendung
-
-=== Create, Delete, Update
-* Änderungen immer in ChangeLogs
-
-=== Rollback
-* liquibase rollback-count --count=2
-* -''- rollback --tag=test
-* auch programmatisch möglich
-.
-.
-.
-
-=== ORM-Mapper
-image::ORM.png[]
-
-== https://docs.liquibase.com/concepts/bestpractices.html[Best-Practices]
-* Changelog Struktur
-** Root-ChangeLog
-** Files nach Versionen, oder Entitäten
-* Maximal eine Änderung pro ChangeSet
 
 == Vorteile
 * Änderungen gespeichert
