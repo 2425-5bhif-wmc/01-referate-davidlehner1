@@ -7,7 +7,7 @@
     http://www.liquibase.org/xml/ns/dbchangelog
     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <include file="db/changeLog_employee.xml"/>
-    <include file="db/changeLog_author.xml"/>
+    <include file="src/main/resources/db/changeLog_employee.xml"/>
+    <include file="src/main/resources/db/changeLog_author.xml"/>
 
 </databaseChangeLog>

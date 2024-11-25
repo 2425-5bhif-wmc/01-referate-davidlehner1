@@ -43,26 +43,27 @@ Konzept, Technologien, Liquibase
 [.notes]
 ****
 * Bei der Datenbankversionierung geht es darum, Informationen über ältere Stände während der Entwicklung zu speichern.
-* Die Verwaltung und Nachverfolgung von Änderungen ist wichtig.
-* Speichern verschiedene DB-Schemas für Verschiedene Umgebungen (Entwicklung, Production...)
+* Die Verwaltung und Nachverfolgung von Änderungen ist wichtig. (warum, erfährt ihr im Laufe)
 * Dies wird erledigt mittels Migrationsskripte
 ****
 
 == Was ist das Problem?
-* Verlorene Informationen in der Entwicklung
-* Schwierige Rückverfolgbarkeit und Wiederherstellung von früheren Ständen.
-* Inkonsistenz zwischen verschiedenen Umgebungen (fehlerhafte Tabellen)
-* Rollback Probleme
+* Verlorene Informationen in der Entwicklung , nachvollziehen von Änderungen
+* Fehlersuche / Rollback
+* Inkonsistenz zwischen verschiedenen Umgebungen
 
 [.notes]
 ****
-* Hauptsächliches Problem liegt in der Entwicklung
 * Wird keine Datenbankversionierung verwendet, gehen Informationen über alte Stände während der Entwicklung verloren.
-* Wird nun an einer neuen Funktionalität gearbeitet, wodurch die Datenbank verändert werden muss, kann es bei Problemen schwierig werden den Fehler zu finden bzw zu rekonstruieren.
-* Man is sich schließlich nicht ganz sicher woher der Fehler kommt, weil keine Dokumentation & Wiederherstellung möglich
-* Die Entwickler können zudem auf ihren lokalen Maschinen andere Stände der Datenbank haben, wie auf Testumgebungen / Production Umgebungen.
-* Mit einem Migrationsskript würde das überall gleich aussehen, bzw übernommen werden können.
-* Falls ein Release in der Produktionsumgebung schiefgeht, gibt es keine einfache Möglichkeit, die Datenbank auf einen funktionierenden Zustand zurückzusetzen, ohne aufwändige manuelle Eingriffe vorzunehmen.
+** Erschwert Fehlersuche, bei Fehler durch bspw. neues Feature
+** keine Dokumentation, keine Versionen
+* Fehlersuche
+** Datenbankänderung verursacht Fehler -> alter Stand aus Kopf wiederherstellen
+** Keine Rollback Funktionalität
+** Fehleranfällig
+* Inkonsistenz zwischen Umgebungen
+** Lokale Rechner, Teams, Umgebungen (Staging, Production...)
+** Mit einem Migrationsskript würde das überall gleich aussehen
 ****
 
 === Beispiel (Ausgangssituation):
@@ -98,7 +99,6 @@ Konzept, Technologien, Liquibase
 ** https://docs.liquibase.com/commands/inspection/diff.html[Unterschiede Herausfinden]
 * Rollback-Mechanismus
 * Konsistenz
-* Unabhängigkeit
 
 [.notes]
 ****
@@ -112,10 +112,8 @@ Konzept, Technologien, Liquibase
 ** Verursacht Feature oder Release Probleme, können diese einfach mittels Migrationsskripten zurückverfolgt und gerollbacked werden
 * Konsistenz
 ** Durch die Automatisierung der Datenbankänderungen können Entwickler problemlos in einer konsistenten Testumgebung arbeiten.
-** Wenn ein Entwickler eine neue Umgebung einrichtet oder an einem Feature arbeitet, kann er die Datenbankversionierung verwenden, um sicherzustellen, dass alle notwendigen Änderungen konsistent angewendet werden.
+** Änderungen in Changelogs formulieren, wenn neues Feature
 ** Neues ChangeLog erstellen, liquibase:update verwenden, fertig
-* Unabhängigkeit
-** Teams können lokal oder in deren eigenen Staging-Umgebungen mit anderen Datenbankversionen arbeiten. Wurden eh dokumentiert.
 ****
 
 == Liquibase
@@ -128,6 +126,7 @@ Konzept, Technologien, Liquibase
 * https://quarkus.io/guides/liquibase
 * https://docs.liquibase.com/concepts/connections/creating-config-properties.html
 * Quarkus maven dependency
+* ChangeLog.xml
 * Liquibase properties file
 
 [source, xml]

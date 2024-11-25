@@ -5,7 +5,7 @@
     https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="2" author="david" labels="testing">
-        <createTable tableName="Author">
+        <createTable tableName="author">
             <column name="FIRSTNAME" type="VARCHAR(255)"/>
             <column name="LASTNAME" type="VARCHAR(255)"/>
             <column name="ID" type="VARCHAR(255)">
