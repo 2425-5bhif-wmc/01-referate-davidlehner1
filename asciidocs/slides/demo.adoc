@@ -44,8 +44,7 @@ Konzept, Technologien, Liquibase
 ****
 * Bei der Datenbankversionierung geht es darum, Informationen über ältere Stände während der Entwicklung zu speichern.
 * Die Verwaltung und Nachverfolgung von Änderungen ist wichtig.
-* Verschiedene Konfigurationen für Verschiedene Umgebungen (Entwicklung, Production...)
-* Mittels Profiles in Quarkus
+* Speichern verschiedene DB-Schemas für Verschiedene Umgebungen (Entwicklung, Production...)
 * Dies wird erledigt mittels Migrationsskripte
 ****
 
@@ -58,9 +57,9 @@ Konzept, Technologien, Liquibase
 [.notes]
 ****
 * Hauptsächliches Problem liegt in der Entwicklung
-* Wird keine Datenbankversionierung verwendet, gehen Informationen über alte Stände verloren.
+* Wird keine Datenbankversionierung verwendet, gehen Informationen über alte Stände während der Entwicklung verloren.
 * Wird nun an einer neuen Funktionalität gearbeitet, wodurch die Datenbank verändert werden muss, kann es bei Problemen schwierig werden den Fehler zu finden bzw zu rekonstruieren.
-* Man is sich schließlich nicht ganz sicher woher der Fehler kommt
+* Man is sich schließlich nicht ganz sicher woher der Fehler kommt, weil keine Dokumentation & Wiederherstellung möglich
 * Die Entwickler können zudem auf ihren lokalen Maschinen andere Stände der Datenbank haben, wie auf Testumgebungen / Production Umgebungen.
 * Mit einem Migrationsskript würde das überall gleich aussehen, bzw übernommen werden können.
 * Falls ein Release in der Produktionsumgebung schiefgeht, gibt es keine einfache Möglichkeit, die Datenbank auf einen funktionierenden Zustand zurückzusetzen, ohne aufwändige manuelle Eingriffe vorzunehmen.
@@ -177,7 +176,7 @@ image::ORM.png[]
 ** Files nach Versionen, oder Entitäten
 * Maximal eine Änderung pro ChangeSet
 
-=== Mehrere Datenbanken
+=== https://docs.liquibase.com/concepts/multi-teams-same-db-oracle.html[Mehrere Datenbanken]
 image::multiple_dbs.png[]
 
 === Mehrere Datenbanken
@@ -233,12 +232,6 @@ liquibase update --changelog-file=masterChangelog.xml \
 * Reihung klarer bei Liquibase
 ** Liquibase: Nach definition in Root-File
 ** Flyway: In Filename angeben
-
-=== https://www.baeldung.com/liquibase-vs-flyway[Warum Liquibase?]
-* Rollback
-** Liquibase: Via CLI: liquibase rollback ...
-** Flyway: Nach Filenames (U = Undo)
-* Kein Snapshot feature bei Flyway (aktueller Stand der DB)
 
 == Workflow
 image::Developer-Workflow.png[Developer Workflow]
