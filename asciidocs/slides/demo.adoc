@@ -37,14 +37,14 @@ Konzept, Technologien, Liquibase
 
 == Einführung
 * Verwaltung und Nachverfolgung von Änderungen
-* Migrationen (automatische Anwendung auf verschiedenen Systemen)
+* Änderungen (automatische Anwendung auf verschiedenen Systemen)
 
 
 [.notes]
 ****
 * Bei der Datenbankversionierung geht es darum, Informationen über ältere Stände während der Entwicklung zu speichern.
 * Die Verwaltung und Nachverfolgung von Änderungen ist wichtig. (warum, erfährt ihr im Laufe)
-* Dies wird erledigt mittels Migrationsskripte
+* Dies wird erledigt mittels Migrationsskripte ~ Files, worin Änderungen von eine auf die andere Version gegeben sind.
 ****
 
 == Was ist das Problem?
@@ -109,7 +109,7 @@ Konzept, Technologien, Liquibase
 ** Es kann automatisch überprüft werden welche Änderungen noch nicht in der Datenbank übernommen wurden
 ** Änderungen werden entsprechend ausgerollt "Liquibase update"
 * Rollback - Mechanismus
-** Verursacht Feature oder Release Probleme, können diese einfach mittels Migrationsskripten zurückverfolgt und gerollbacked werden
+** Verursacht Feature oder Release Probleme, können diese einfach mittels Changelogs/Änderungsskripten zurückverfolgt und gerollbacked werden
 * Konsistenz
 ** Durch die Automatisierung der Datenbankänderungen können Entwickler problemlos in einer konsistenten Testumgebung arbeiten.
 ** Änderungen in Changelogs formulieren, wenn neues Feature
@@ -117,8 +117,15 @@ Konzept, Technologien, Liquibase
 ****
 
 == Liquibase
-* Open-Source-Lösung für Datenbankversionierung und -migration.
+* Open-Source-Lösung für Datenbankversionierung.
 * Unterstützt diverse Datenbanken (auch NoSQL)
+
+=== https://docs.liquibase.com/concepts/changelogs/home.html[Changelog]
+* Changelog (File mit allen Änderungen)
+* Changeset (Enthält Änderung)
+* https://docs.liquibase.com/change-types/home.html[Änderungstyp] (create..., add...)
+
+image::simple_changelog.png[]
 
 == Live DEMO
 
@@ -126,8 +133,9 @@ Konzept, Technologien, Liquibase
 * https://quarkus.io/guides/liquibase
 * https://docs.liquibase.com/concepts/connections/creating-config-properties.html
 * Quarkus maven dependency
-* ChangeLog.xml
 * Liquibase properties file
+* ChangeLog.xml
+* brew install liquibase
 
 [source, xml]
 ----
@@ -165,6 +173,14 @@ Konzept, Technologien, Liquibase
         <tagDatabase tag="createQuarkusTable"/>
     </changeSet>
 ----
+
+=== CLI
+
+* liquibase update
+* liquibase rollback --tag=tagname
+* liquibase rollback-count --count=4
+* liquibase generateChangeLog --changeLogFile=fileName
+* liquibase snapshot
 
 === ORM-Mapper
 image::ORM.png[]
