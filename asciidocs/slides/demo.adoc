@@ -90,12 +90,13 @@ Konzept, Technologien, Liquibase
 * Es gibt keinen automatisierten Weg -> das Team versucht die Struktur händisch wieder herzustellen. Könnte weitere Fehler auslösen
 * Andere Teams haben die Änderung ebenfalls nicht mitbekommen, da diese nicht dokumentiert wurde
 * Lokale Datenbanken in den Teams könnten variieren
+* Man müsste für jede existierende Datenbank manuell umstellen.
 ****
 
 == Wie wird das Problem gelöst?
 * Einsatz von Tools zur Datenbankversionierung wie Liquibase.
 * Zentralisierte Verwaltung von Datenbankänderungen (Versionierung)
-* Automatische Synchronisierung der Datenbank
+* Synchronisierung der Datenbank
 ** https://docs.liquibase.com/commands/inspection/diff.html[Unterschiede Herausfinden]
 * Rollback-Mechanismus
 * Konsistenz

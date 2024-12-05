@@ -6,9 +6,9 @@
 
     <changeSet id="2" author="david" labels="testing">
         <createTable tableName="author">
-            <column name="FIRSTNAME" type="VARCHAR(255)"/>
-            <column name="LASTNAME" type="VARCHAR(255)"/>
-            <column name="ID" type="VARCHAR(255)">
+            <column name="FIRSTNAME" type="VARCHAR2(255)"/>
+            <column name="LASTNAME" type="VARCHAR2(255)"/>
+            <column name="ID" type="VARCHAR2(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

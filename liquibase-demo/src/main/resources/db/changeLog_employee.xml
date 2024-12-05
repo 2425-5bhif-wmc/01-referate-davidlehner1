@@ -6,10 +6,10 @@
 
     <changeSet author="david" id="1" labels="testing">
         <createTable tableName="quarkus">
-            <column name="ID" type="VARCHAR(255)">
+            <column name="ID" type="VARCHAR2(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="NAME" type="VARCHAR(255)"/>
+            <column name="NAME" type="VARCHAR2(255)"/>
         </createTable>
     </changeSet>
 
@@ -19,7 +19,7 @@
 
     <changeSet id="3" author="david" labels="testingAll">
         <addColumn tableName="quarkus">
-            <column name="EMAIL" type="VARCHAR(255)"/>
+            <column name="EMAIL" type="VARCHAR2(255)"/>
         </addColumn>
     </changeSet>
 
@@ -31,7 +31,7 @@
         <dropColumn tableName="quarkus" columnName="NAME"/>
         <rollback>
             <addColumn tableName="quarkus">
-                <column name="NAME" type="VARCHAR(255)"/>
+                <column name="NAME" type="VARCHAR2(255)"/>
             </addColumn>
         </rollback>
     </changeSet>
@@ -41,7 +41,7 @@
     </changeSet>
 
     <changeSet author="david" id="5" labels="testingAll">
-        <renameColumn tableName="quarkus" oldColumnName="EMAIL" newColumnName="E-MAIL" columnDataType="VARCHAR(255)"/>
+        <renameColumn tableName="quarkus" oldColumnName="EMAIL" newColumnName="E-MAIL" columnDataType="VARCHAR2(255)"/>
     </changeSet>
 
     <changeSet id="tag-beforeRename" author="david" labels="testingAll">
