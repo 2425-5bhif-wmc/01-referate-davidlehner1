@@ -180,9 +180,9 @@ image::simple_changelog.png[]
 * liquibase rollback --tag=tagname
 * liquibase rollback-count --count=4
 * liquibase generateChangeLog --changeLogFile=fileName
-* liquibase snapshot
+* liquibase --output-file=<filename> snapshot --snapshot-format=<format(json...)>
 
-=== ORM-Mapper
+=== ORM
 image::ORM.png[]
 
 == https://docs.liquibase.com/concepts/bestpractices.html[Best-Practices]
@@ -271,10 +271,17 @@ image::Developer-Workflow.png[Developer Workflow]
 * Änderungen gespeichert
 * Rollback feature, bei Fehlern oder arbeiten auf gemeinsamer DB
 * Fehleranfälligkeit vermindert
+* Einbindung in jeweilige CI/CD pipelines
+
+[.notes]
+****
+CI/CD pipelines: Einbindung in diese von Vorteil,
+automatische änderung der production db, ohne händischen Eingriff etc.
+****
 
 == Nachteile
 * Höherer Aufwand bei Erstellung des Projekts
-* Funktionalität mit ORM-Mapper etwas umständlich
+* Funktionalität mit ORM etwas umständlich
 
 == Vielen Dank!
 * Quellen:
