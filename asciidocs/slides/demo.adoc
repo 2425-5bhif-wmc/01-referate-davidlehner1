@@ -37,7 +37,7 @@ Konzept, Technologien, Liquibase
 
 == Einführung
 * Verwaltung und Nachverfolgung von Änderungen
-* Änderungen (automatische Anwendung auf verschiedenen Systemen)
+* Änderungen (Anwendung auf verschiedenen Systemen)
 
 
 [.notes]
@@ -48,7 +48,7 @@ Konzept, Technologien, Liquibase
 ****
 
 == Was ist das Problem?
-* Verlorene Informationen in der Entwicklung , nachvollziehen von Änderungen
+* Verlorene Informationen in der Entwicklung, Nachvollziehen von Änderungen
 * Fehlersuche / Rollback
 * Inkonsistenz zwischen verschiedenen Umgebungen
 
@@ -97,7 +97,7 @@ Konzept, Technologien, Liquibase
 * Einsatz von Tools zur Datenbankversionierung wie Liquibase.
 * Zentralisierte Verwaltung von Datenbankänderungen (Versionierung)
 * Synchronisierung der Datenbank
-** https://docs.liquibase.com/commands/inspection/diff.html[Unterschiede Herausfinden]
+** https://docs.liquibase.com/commands/inspection/diff.html[Unterschiede herausfinden]
 * Rollback-Mechanismus
 * Konsistenz
 
