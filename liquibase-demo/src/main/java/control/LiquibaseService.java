@@ -13,7 +13,7 @@ public class LiquibaseService {
 
     public void updateDatabase() {
         try (Liquibase liquibase = liquibaseFactory.createLiquibase()) {
-            liquibase.update((String) null); // Updates the database to the latest state
+            liquibase.update(); // Updates the database to the latest state
         } catch (LiquibaseException e) {
             throw new RuntimeException("Failed to update database", e);
         }
